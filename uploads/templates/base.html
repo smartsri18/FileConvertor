@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Simple File Upload</title>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="{% static "CDN\css\bootstrap.css" %}">
+    <link rel="stylesheet" href="{% static "css\mystyle.css" %}">
+  </head>
+  <style media="screen">
+  .brand-align{
+    margin-right: 5rem;
+  }
+  .space-align{
+    margin-bottom: 40px;
+  }
+  </style>
+  <body>
+    <div class="container-fluid" style="padding:0;">
+    <nav class="navbar navbar-light sticky-top" style="background-color: #e3f2fd;">
+      <ul class="nav nav-pills nav-fill">
+        <a class="nav-item navbar-brand brand-align" href="#">FF | CONVERSION</a>
+        <a class="nav-item nav-link {% if request.resolver_match.url_name == "index" %}active{% endif %}" href="{% url "index" %}">HOME</a>
+        <a class="nav-item nav-link {% if request.resolver_match.url_name == "md_to_html" or request.resolver_match.url_name == "convert_view" %}active{% endif %}" href="{% url "md_to_html" %}">MD to HTML</a>
+        <a class="nav-item nav-link {% if request.resolver_match.url_name == "json_to_xml" or request.resolver_match.url_name == "convert_json_to_xml" %}active{% endif %}" href="{% url "json_to_xml" %}">JSON to XML</a>
+        <a class="nav-item nav-link {% if request.resolver_match.url_name == "xaml_to_csv" or request.resolver_match.url_name == "convert_xml_to_csv" %}active{% endif %}" href="{% url "xaml_to_csv" %}">XML to CSV</a>
+      </ul>
+      </nav>
+    </div>
+    <p class="space-align"></p>
+    {% block css %}
+    {% endblock%}
+
+    {% block content %}
+
+    {% endblock %}
+
+    <nav class="navbar navbar-light fixed-bottom" style="background-color: #e3f2fd;">
+      <ul class="nav float-right">
+        <a class="text-center" href="#">Copyrights @ 2k19</a>
+      </ul>
+  </body>
+  <script src="{% static "Jquery\jquery.js" %}"></script>
+  {% block script %}
+  {% endblock %}
+</html>

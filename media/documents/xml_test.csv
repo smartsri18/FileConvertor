@@ -1,0 +1,4 @@
+Name,PhoneNumber,EmailAddress,Address
+Sam,1234567891,sam@example.com,"['Sri Ram Nagar', 'Chennai', 'TN', '600089']"
+jack,9876543210,jack@gmail.com,"['Jones street', 'Los Angeles', 'CA', '56666']"
+smart,9873210654,smart@gmail.com,"['Paul street', 'Denmark', 'CE', '2366']"

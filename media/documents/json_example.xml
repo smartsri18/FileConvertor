@@ -1,0 +1,57 @@
+<data>
+ <item>
+  <type>
+   articles
+  </type>
+  <id>
+   1
+  </id>
+  <attributes>
+   <title>
+    JSON:API paints my bikeshed!
+   </title>
+   <body>
+    The shortest article. Ever.
+   </body>
+   <created>
+    2015-05-22T14:56:29.000Z
+   </created>
+   <updated>
+    2015-05-22T14:56:28.000Z
+   </updated>
+  </attributes>
+  <relationships>
+   <author>
+    <data>
+     <id>
+      42
+     </id>
+     <type>
+      people
+     </type>
+    </data>
+   </author>
+  </relationships>
+ </item>
+</data>
+<included>
+ <item>
+  <type>
+   people
+  </type>
+  <id>
+   42
+  </id>
+  <attributes>
+   <name>
+    John
+   </name>
+   <age>
+    80
+   </age>
+   <gender>
+    male
+   </gender>
+  </attributes>
+ </item>
+</included>

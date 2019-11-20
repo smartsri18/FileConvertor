@@ -1,0 +1,311 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <!-- <h1>File Format Converter</h1>
+    <div class="jumbotron">
+      <li><a href="{% url "md_to_html" %}">md to hmtl</a></li>
+      <li><a href="{% url "json_to_xml" %}">json to xaml</a></li>
+      <li><a href="{% url "xaml_to_csv" %}">xaml to csv</a></li>
+    </div> -->
+
+    <!-- <div class="sic-modal"> -->
+    <div class="sic-modal-content">
+    <div class="sic-backdrop">
+
+    <!--  Slideshow  -->
+    <div id="slideshow" class="slideshow">
+      <img class="slide" src="{% static "images\logo\html.jpg" %}">
+      <img class="slide" src="{% static "images\logo\json.jpg" %}">
+      <img class="slide" src="{% static "images\logo\xml.jpg" %}">
+      <img class="slide" src="{% static "images\logo\csv.jpg" %}">
+      <img class="slide" src="{% static "images\logo\md.jpg" %}">
+
+      <!-- <img class="slide" src="https://image.tmdb.org/t/p/w1280/85gpZHaYZQm9vQyOC9iCiqSdY83.jpg"> -->
+      <!-- Slideshow buttons -->
+      <button id="prev" class="slideButton lft">&#10094;</button>
+      <button id="next" class="slideButton rgt">&#10095;</button>
+    </div>
+
+
+    </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block css %}
+<style media="screen">
+.sic-modal {
+z-index: 1001;
+position: fixed;
+width: 100%;
+height: 100%;
+background-color: black;
+text-align: center;
+top: 0; bottom: 0;
+left: 0; right: 0;
+}
+
+.sic-modal:before {
+content: '';
+}
+
+.sic-modal-content {
+display: -ms-flexbox;
+display: flex;
+-ms-flex-pack: center;
+justify-content: center;
+-ms-flex-align: center;
+align-items: center;
+height: 100%;
+}
+
+/* Responsive size max 85% */
+.sic-backdrop {
+max-width: 70%;
+}
+
+.slideshow {
+position: relative;
+background: black;
+}
+
+.slide {
+position: relative;
+display: block;
+max-width: 100%;
+height: auto;
+}
+
+.absolute {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+}
+
+.slideButton  {
+position: absolute;
+display: inline-block;
+transform: translate(0%,-50%);
+border: none;
+padding: 8px 16px;
+vertical-align: middle;
+cursor: pointer;
+opacity: 0;
+transition: .6s;
+z-index: 100;
+}
+
+.slideshow:hover .slideButton {
+opacity: 1;
+}
+
+.rgt {
+top: 50%;
+right: 0%;
+}
+
+.lft {
+top: 50%;
+left: 0%;
+}
+
+/* DEV STYLE */
+
+
+#start,
+#stop {
+position: absolute;
+display: inline-block;
+cursor: pointer;
+margin: 0 38%;
+z-index: 10002;
+}
+</style>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+// Document Ready start
+$(document).ready(function(){
+
+// Auto start after 2sec
+autostart(2000);
+
+// Start slide
+$('#start').click(function(){
+    start();
+});
+
+// Stop slide
+$('#stop').click(function(){
+    stop();
+});
+
+// Next slide
+$('#next').click(function(){
+    slideFn(1,500,null);
+});
+
+// Prev slide
+$('#prev').click(function(){
+    slideFn(0,500,null);
+});
+
+// Slide to n
+$('#numbers input').click(function(){
+    // Destination number
+    var slideNumber = $(this).val();
+    // Slide
+    slideFn(1,500,slideNumber);
+});
+
+}); // End document ready
+
+
+// Hide other than first slide
+$("#slideshow img:gt(0)").hide();
+
+//
+// SLIDESHOW FUNCTIONS
+//
+
+// Start
+function start(){
+  stop();
+  slideFn(1,750,null);
+  timer = setTimeout(start, interval);
+  slideState = 1;
+};
+
+// Stop
+function stop(){
+  clearTimeout(timer);
+  slideState = 0;
+};
+
+// Autostart
+function autostart(after){
+  slideState = 1;
+  timer = setTimeout(function(){
+      start();
+  },after);
+};
+
+// Slide function
+var interval = 3000,
+  slideIndex = 0,
+  slideState = 0,
+  queueCount = 0,
+  isFading = false,
+  timer = null;
+
+function slideFn(direction,transition,slideNumber) {
+
+  // Count <img> slides
+  var total = $("#slideshow img").html('').length;
+  // Image shortcut
+  var img = $("#slideshow img");
+
+  // Same slide, skip
+  if (total == 1) {
+      console.log('One slide, skip');
+      return;
+  }
+
+  // Same slide, skip
+  if (slideNumber == slideIndex) {
+      isFading = false;
+      console.log('Same slide: '+ slideIndex);
+      return;
+  }
+
+  // Reset slide timer
+  clearTimeout(timer);
+
+  // Count slide request
+  queueCount++;
+
+  // Execute slide only when fade is
+  // finished, limit number of click
+  var execSlide = function() {
+
+      if (!isFading) {
+
+          // Lock slide, reset queue.
+          isFading = true; queueCount = 0;
+
+          // Remove previous absolute class
+          img.removeClass("absolute");
+
+          // Fade out actual image. Z-index prevent IE bug.
+          img.eq(slideIndex).css({zIndex:99}).addClass("absolute").fadeOut(transition, function(){
+              // Unlock slide after fade
+              isFading = false;
+          });
+
+          // Slide direction ? (1) Next
+          if (direction == 1 ) {
+              slideIndex++;
+          } else {
+              slideIndex--;
+          }
+
+          // Reset slideIndex when max reached in positiv or negativ direction
+          if (slideIndex > total-1 || slideIndex < -Math.abs(total-1)) {
+              slideIndex = 0;
+          }
+
+          // Fade in new / specified
+          if (slideNumber == null) {
+              img.eq(slideIndex).css({zIndex:90}).fadeIn(transition);
+          } else {
+              img.eq(slideNumber).css({zIndex:90}).fadeIn(transition);
+              slideIndex = slideNumber;
+          }
+
+          // Slider is ON ? Keep it up.
+          if (slideState == 1) {
+              timer = setTimeout(start, interval);
+          }
+
+      // Queue manual slide request, max 2.
+      } else if ( !(queueCount >= 2) ) {
+          console.log('Slide delayed 200ms');
+          setTimeout(execSlide, 200); // check again in 200ms
+      }
+  }
+
+  // Execute slide
+  execSlide();
+};
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+{%load staticfiles%}
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<title>Welcome | FF convert</title>
+<link rel="stylesheet" href="{% static "CDN\css\bootstrap.css" %}">
+</head>
+<body>
+<h1>File Format Converter</h1>
+<div class="jumbotron">
+<li><a href="{% url "md_to_html" %}">md to hmtl</a></li>
+<li><a href="{% url "json_to_xml" %}">json to xaml</a></li>
+<li><a href="{% url "xaml_to_csv" %}">xaml to csv</a></li>
+</div>
+</body>
+</html> -->

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+ <div class="container">
+   <!-- <h3> Upload your files:</h3> -->
+   <div class="row">
+     <div class="col-6">
+       <form method="post" enctype="multipart/form-data">
+         <div class="card border-info mb-3" style="max-width: 28rem;">
+           <div class="card-header">Upload your files</div>
+           <div class="card-body text-info">
+             {% csrf_token %}
+             <div class="form-group">
+
+               {{ form.document }}
+
+             </div>
+             <div class="form-group">
+               <!-- <div class="form-control"> -->
+               {{ form.uploaded_at }}
+               <!-- </div> -->
+             </div>
+             <button type="submit" class="btn btn-info">Upload</button>
+           </div>
+         </div>
+       </form>
+     </div>
+
+  <div class="col-6">
+    <div class="card border-info mb-3" style="max-width: 28rem;">
+      <div class="card-header">convert .json to .xml</div>
+        <div class="card-body text-info">
+          <div class="container">
+            <div class="row">
+              <div class="col-4">
+                <!-- <div class="form-group"> -->
+                <button type="submit" class="btn btn-info" onclick="location.href='{% url "convert_json_to_xml" %}'">Convert</button>
+                <!-- </div> -->
+              </div>
+              <div class="col-2">
+                <!-- <div class="form-group"> -->
+                <a href="{{ file_url }}" class="btn btn-info" download> Download </a>
+                <!-- </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="container">
+    <div class="row">
+      <div class="col-6">
+        <div class="form-group">
+          <h5 for="exampleFormControlTextarea1">JSON file</h5>
+          <hr>
+          <textarea readonly class="form-control" id="exampleFormControlTextarea1" rows="25" columns=50>{{ from }}</textarea>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="form-group">
+          <h5 for="exampleFormControlTextarea1">XML file</h5>
+          <hr>
+          <textarea readonly class="form-control" id="exampleFormControlTextarea1" rows="25" columns=50>{{ to }}</textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- <p><a href="{% url 'home' %}">Return to home</a></p> -->
+{% endblock %}
